@@ -4,11 +4,16 @@
       {
         "type": "node",
         "request": "launch",
-        "name": "Launch Program",
+        "name": "Run Current File",
         "skipFiles": ["<node_internals>/**"],
-        "program": "${workspaceFolder}/Hello_TypeScript.js",
-        "preLaunchTask": "tsc: build - tsconfig.json",
-        "outFiles": ["${workspaceFolder}/**/*.js"]
+        "program": "${file}"
+        // "type": "node",
+        // "request": "launch",
+        // "name": "Launch Program",
+        // "skipFiles": ["<node_internals>/**"],
+        // "program": "${workspaceFolder}/Hello_TypeScript.js",
+        // "preLaunchTask": "tsc: build - tsconfig.json",
+        // "outFiles": ["${workspaceFolder}/**/*.js"]
 
       }
     ]
