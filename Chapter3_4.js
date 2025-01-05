@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Module1 = void 0;
 let idObject = {
     id: 2,
     name: "this is a name"
@@ -187,4 +189,279 @@ class DerivedFromBaseClass extends BaseClass {
     }
 }
 //just like Interface Class can also inherit or extend other classes 
+//The super function
+class BaseClassWithCtor {
+    constructor(int) {
+        this.int = int;
+    }
+}
+class ExtendedBaseClass extends BaseClassWithCtor {
+    constructor(int, name) {
+        super(int); //Important when inheriting a class that has a constructor we need to use its props and use the function super(name of the prop)
+        this.name = name;
+    }
+}
+//aslo super function must be called before assigning values to the class's own props
+//Function overriding
+class BaseClassWithFn {
+    print(text) {
+        console.log(`BaseClassWithFn.print() : ${text}`);
+    }
+}
+class DerivedClassFnOverride extends BaseClassWithFn {
+    print(text) {
+        console.log(`DerivedClassFnOverride.print(${text})`);
+    }
+}
+let derivedClassFnOverride = new DerivedClassFnOverride();
+derivedClassFnOverride.print("test");
+//this child will override the base function when called from it 
+class DerivedClassFnCallthrough extends BaseClassWithFn {
+    print(text) {
+        super.print(`from DerivedClassFncallthrough : ${text}`);
+    }
+}
+//better way of writing it would be 
+class DerivedClassFnCallthrough2 extends BaseClassWithFn {
+    print(text) {
+        const formattedText = `from DerivedClassFncallthrough : ${text}`;
+        super.print(formattedText);
+    }
+}
+let derivedCallthrough = new DerivedClassFnCallthrough();
+derivedCallthrough.print("text");
+//order of operation text gets send to the class print and from there the result gets send to the base class to finish the function
+//In a way this isnt just calling the base function but extending it 
+//Protected
+class BaseClassProtected {
+    constructor(id) {
+        this.name = "";
+        this.id = id;
+    }
+}
+class AccessProtected extends BaseClassProtected {
+    constructor(id) {
+        super(id);
+        console.log(`base.id = ${this.id}`); // since the prop is protected every child can access it 
+        // console.log(`base.name = ${this.name}`) this is an error since this prop is private
+    }
+}
+let accessProtected = new AccessProtected(1);
+// accessProtected.id = 1;// this will throw an error since protected props can only accessed inside the base class an its children
+// accessProtected.name = "test";This throws an error since we try to use a private prop 
+//Abstract classes
+class EmployeeBase {
+    constructor(id, name) {
+        this.id = id;
+        this.name = name;
+    }
+}
+class OfficeWorker extends EmployeeBase {
+    doWork() {
+        console.log(`${this.name} : doing work`);
+    }
+}
+class OfficeManager extends OfficeWorker {
+    constructor() {
+        super(...arguments);
+        this.employees = [];
+    }
+    manageEmployees() {
+        super.doWork(); //since officemanager gets this method from OfficeWorker it will execute its function
+        for (let employee of this.employees) {
+            employee.doWork();
+        }
+    }
+}
+let joeBlogg = new OfficeWorker(1, "Joe");
+let jillBlogg = new OfficeWorker(2, "Jill");
+let jackManager = new OfficeManager(3, "Jack");
+jackManager.employees.push(joeBlogg);
+jackManager.employees.push(jillBlogg);
+jackManager.manageEmployees();
+//Abstract classes are classes build to extend others 
+//Abstract class methods
+//instanceof
+class A {
+}
+class BfromA extends A {
+}
+class CfromA extends A {
+}
+class DfromC extends CfromA {
+}
+console.log(`A instance of A : ${new A() instanceof A}`);
+console.log(`BFromA instance of A : ${new BfromA() instanceof A}`);
+console.log(`BfromA instance of BfromA : ${new BfromA() instanceof BfromA}`);
+console.log(`CfromA instance of BfromA : ${new CfromA instanceof BfromA}`);
+console.log(`DfromC instance of CfromA : ${new DfromC() instanceof CfromA}`);
+console.log(`DfromC instance of A :${new DfromC() instanceof A}`);
+//when working with lots of classes that inherit something it good to check whether a class has an instance of a class
+//key word instanceof returns a boolean wether the statment is true or not
+//Interfaces extending classes
+class BaseInterfaceClass {
+    constructor() {
+        this.id = 0;
+    }
+    print() {
+        console.log(`this.id = ${this.id}`);
+    }
+}
+class ImplementsExt extends BaseInterfaceClass {
+    setId(id) {
+        this.id = id;
+    }
+}
+//Exporting modules
+class Module1 {
+    print() {
+        localPrint(`Module1.print() called`);
+    }
+}
+exports.Module1 = Module1;
+function localPrint(text) {
+    console.log(`localPrint: ${text}`);
+}
+//modules are small amount of code made to be exported or imported to outside sources
+//NOTE function localPrint is not exported but its encapsulated so it can be used upon calling from an outside source
+//Exporting to module_main.ts
+//Generics and Advanced Type Inference chapter 4
+function printGeneric(value) {
+    console.log(`the type of value is : ${typeof value}`);
+    console.log(`value === ${value}`);
+}
+printGeneric(1);
+printGeneric("test");
+printGeneric(true);
+printGeneric(() => { });
+printGeneric({ id: 1 });
+//Generic can take all kinds of values from number,string,boolean,function,classes
+printGeneric("string printing"); //this makes a specific request to generic that it will use a string 
+// printGeneric<string>(2); Here by specifing string and giving a number generic is working and will trow an error
+//Multiple generic types
+function multipleGenericParams(param1, param2) {
+}
+multipleGenericParams(1, "test");
+multipleGenericParams(1, "test");
+multipleGenericParams(true, false);
+multipleGenericParams("first", "second");
+//Allows for multiple params to be generic leading to all sorts of combinations
+//Constraining the type of T
+class Concatenator {
+    concatenateArray(items) {
+        let returnString = "";
+        for (let i = 0; i < items.length; i++) {
+            returnString += i > 0 ? "," : "";
+            returnString += items[i].toString();
+        }
+        return returnString;
+    }
+}
+//using this complex syntax ClassName<T extends data type | data type> this allows for the class to work with specific data types 
+//in the concatenateArrayFn(Items: T) T references the class T so only the specified data type will work this ensured typesafety 
+let concator = new Concatenator();
+let concatResult = concator.concatenateArray([
+    "first", "second", "third"
+]);
+console.log(`concatResult = ${concatResult}`);
+concatResult = concator.concatenateArray([
+    1000, 2000, 3000
+]);
+console.log(`concatResult = ${concatResult}`);
+function useT(item) {
+    item.print();
+    //    item.id = 1; // error : id is not common
+    //    item.name = "test"; // error : name is not common
+}
+//this fails because if we work with IprintId it wont have name ,a nd if we work with PrintName it wont have id
+//Generic constraints
+function objectKey(obj, key) {
+    let keyValue = obj[key];
+    console.log(`object has ${key.toString()} with a value of ${keyValue}`);
+}
+//We name a function set it to accept Generic <T> and Generic <K> that takes the keyof the T 
+//we then take the value of the key with a variable let keyVlaue = object[key];
+//NOTE Extends key word makes it so that generic can work only with specific data type
+let obj1 = {
+    id: 1,
+    name: "myName",
+    print() { console.log(`${this.id}`); }
+};
+objectKey(obj1, "id");
+objectKey(obj1, "name");
+//    objectKey(obj1, "surname"); Surname is not a key in obj1
+objectKey(obj1, "print"); //Interesting this works with functions as well 
+class LogClass {
+    logToConsole(iPrintObj) {
+        iPrintObj.print();
+    }
+}
+let printObject = {
+    print() { console.log(`printObject.print() called`); }
+};
+//interesting way to write the fucntion of an interface 
+let logClass = new LogClass();
+logClass.logToConsole(printObject);
+//THIS IS A BIT COMPLEX
+//Creating new objects within generics
+class Class1 {
+}
+class Class2 {
+}
+function createClassInstance(arg1) {
+    return new arg1(); // error : see below
+}
+let classAInstance = createClassInstance(ClassA);
+let ab = {
+    a: 1,
+    b: "test"
+};
+let allOptional = {};
+let readOnlyVar = {
+    a: 1,
+    b: "test"
+};
+let pickAbObject = {
+    a: 1,
+    b: "test"
+};
+let recordVariable = {
+    a: 5,
+    b: 33
+};
+//this is a custom type that accepts a generic then it will check if its a number if its not it will return string
+function loginNumberOrString(input) {
+    console.log(`Log number or string : ${input}`);
+}
+loginNumberOrString(1);
+loginNumberOrString("test");
+// loginNumberOrString<boolean>(true); 
+//Function is a good way of making use for our custom generic type 
+loginNumberOrString("Test");
+function ReturnGenericChaninig(input) {
+    let context = [...input];
+    let stringToReturn = "";
+    for (let item in context) {
+        stringToReturn += context[item];
+    }
+    return stringToReturn;
+}
+let keyA = ReturnGenericChaninig([1]);
+console.log(`keyA = ${keyA}`);
+let keyAb = ReturnGenericChaninig([1, "test"]);
+console.log(`keyAb = ${keyAb}`);
+let keyAbc = ReturnGenericChaninig([1, "test", true]);
+console.log(`keyAbc = ${keyAbc}`);
+function compareValues(input, compareTo) {
+    // do comparison
+}
+compareValues(new Date(), new Date());
+compareValues(1, new Date());
+compareValues(1, 2);
+compareValues("test", new Date());
+compareValues("test", 1);
+compareValues("test", "test");
+function testInferFromPropertyType(arg) { }
+testInferFromPropertyType("test");
+testInferFromPropertyType(1);
 //# sourceMappingURL=Chapter3_4.js.map
