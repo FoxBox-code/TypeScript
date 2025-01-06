@@ -321,13 +321,13 @@ __decorate([
 //Using decorator metadata
 require("reflect-metadata");
 function reflectParameterDec(target, methodName, parameterIndex) {
-    let designType = Reflect.getMetadata("design:type", target, methodName);
+    let designType = Reflect.getMetadata("design:type", target, methodName); //This returns the type in this case function
     console.log(`design type: ${designType.name}`);
-    let designParamTypes = Reflect.getMetadata("design:paramtypes", target, methodName);
+    let designParamTypes = Reflect.getMetadata("design:paramtypes", target, methodName); //this returns an array of parameters
     for (let paramType of designParamTypes) {
         console.log(`param type : ${paramType.name}`);
     }
-    let designReturnType = Reflect.getMetadata("design:returntype", target, methodName);
+    let designReturnType = Reflect.getMetadata("design:returntype", target, methodName); //this returns the return type of the function
     console.log(`return types : ${designReturnType.name}`);
 }
 class ClassWithReflectMetaData {
@@ -341,4 +341,5 @@ __decorate([
     __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Number)
 ], ClassWithReflectMetaData.prototype, "print", null);
+//Note docorators meta data are used in class, props , methods/functinons and params.
 //# sourceMappingURL=chapter5_6.js.map

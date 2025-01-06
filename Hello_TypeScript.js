@@ -307,4 +307,23 @@ withLiteral("three");
 withLiteral(65535);
 // withLiteral("four");//this will fail because it not in the type
 // withLiteral(2);//this will fail because it not in the type
+var SwitchEnum;
+(function (SwitchEnum) {
+    SwitchEnum[SwitchEnum["ONE"] = 0] = "ONE";
+    SwitchEnum[SwitchEnum["TWO"] = 1] = "TWO";
+})(SwitchEnum || (SwitchEnum = {}));
+function testEnumSwitch(value) {
+    let returnValue = "";
+    switch (value) {
+        case SwitchEnum.ONE:
+            returnValue = "One";
+            break;
+        case SwitchEnum.TWO:
+            returnValue = "Two";
+    }
+    return returnValue;
+}
+console.log(`SwitchEnum.ONE = ${testEnumSwitch(SwitchEnum.ONE)}`);
+console.log(`SwitchEnum.TWO = ${testEnumSwitch(SwitchEnum.TWO)}`);
+console.log(`hello mom`);
 //# sourceMappingURL=Hello_TypeScript.js.map
